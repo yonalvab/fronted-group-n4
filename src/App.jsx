@@ -3,6 +3,7 @@ import './index.css'
 import lupa from './assets/lupa.png'
 import logovideo from './assets/logovideo.png'
 import { Cards } from './components/Cards'
+import { InfoUser } from './components/InfoUser'
 
 function App() {
 
@@ -13,7 +14,7 @@ function App() {
           <div className=' flex items-center ' >
             <div className=' flex items-center gap-[2px] ' >
               <img className=' w-12 h-12 ' src={logovideo} alt="" />
-              <span className=' text-[30px] font-poetsen text-[#D80000]  ' >StreamV</span>
+              <span className=' text-[30px] font-poetsen text-red-600 ' >StreamV</span>
             </div>
             <div className=' bg-white w-[450px] h-9 flex items-center gap-2 px-3 rounded-full ml-[80px] ' >
               <div className=' w-7 border-r-2 ' >
@@ -30,17 +31,19 @@ function App() {
             </div>
           </div>
         </header>
-        <article className=' w-[1390px] h-[640px] bg-slate-300 rounded-3xl p-14 grid grid-cols-4 gap-8 overflow-y-auto will-change-scroll ' >
-          <Cards />
-          <Cards />
-          <Cards />
-          <Cards />
-          <Cards />
-
-          <Cards />
-          <Cards />
-          <Cards />
-        </article>
+        <div className=' flex gap-4 ' >
+          <article className=' w-[980px] h-[640px] bg-slate-300 rounded-3xl p-14 grid grid-cols-2 gap-8 overflow-y-auto will-change-scroll ' >
+            <Cards />
+            <Cards />
+            <Cards />
+            <Cards />
+            <Cards />
+            <Cards />
+            <Cards />
+            <Cards />
+          </article>
+          <InfoUser />
+        </div>
       </main >
     </>
   )
