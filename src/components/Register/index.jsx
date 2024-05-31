@@ -9,56 +9,79 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         if (password !== confirmPassword) {
             setMessage('Passwords do not match');
             return;
         }
-        // Agregar la lógica de envío de datos al backend
-        setMessage('Registration successful');
+
+        try {
+            const response = await fetch('/usuarios/registro', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }), // shorthand for { email: email, password: password }
+            });
+
+            if (response.ok) {
+                setMessage('Registration successful');
+                // Aquí podrías redirigir al usuario a otra página si el registro es exitoso
+            } else {
+                const data = await response.json();
+                setMessage(data.message || 'Error: Unable to register.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setMessage('Error: Unable to register. Please try again later.');
+        }
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            <div className="max-w-md w-full bg-white p-8 shadow-lg rounded-lg">
-                <h2 className="text-2xl font-bold mb-8 text-center">Register</h2>
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-purple-700 to-purple-900">
+            <div className="max-w-md w-full bg-white bg-opacity-10 p-8 shadow-lg rounded-lg">
+                <h2 className="text-3xl font-bold mb-8 text-center text-white">Register</h2>
                 {message && <p className="text-red-500 text-center mb-4">{message}</p>}
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label className="block text-gray-700">Email</label>
+                        <label className="block text-white">Email</label>
                         <input
                             type="email"
-                            className="w-full px-3 py-2 border rounded"
+                            className="w-full px-3 py-2 border border-white rounded bg-transparent text-white"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="block text-gray-700">Password</label>
+                        <label className="block text-white">Password</label>
                         <input
                             type="password"
-                            className="w-full px-3 py-2 border rounded"
+                            className="w-full px-3 py-2 border border-white rounded bg-transparent text-white"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
                     <div className="mb-6">
-                        <label className="block text-gray-700">Confirm Password</label>
+                        <label className="block text-white">Confirm Password</label>
                         <input
                             type="password"
-                            className="w-full px-3 py-2 border rounded"
+                            className="w-full px-3 py-2 border border-white rounded bg-transparent text-white"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                         />
                     </div>
-                    <Link to='/dashboard' >
-                        <button
-                            type="submit"
-                            className="w-full py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-                        >
-                            Register
-                        </button>
-                    </Link>
+                    <button
+                        type="submit"
+                        className="w-full py-2 bg-white text-purple-700 rounded hover:bg-gray-200"
+                    >
+                        Register
+                    </button>
                 </form>
+                <div className="text-center mt-4">
+                    <Link to="/login" className="text-white hover:underline">
+                        Already have an account? Login
+                    </Link>
+                </div>
             </div>
         </div>
     );
