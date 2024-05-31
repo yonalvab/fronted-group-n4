@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
     const [email, setEmail] = useState('');
@@ -49,12 +50,14 @@ const Register = () => {
                             onChange={(e) => setConfirmPassword(e.target.value)}
                         />
                     </div>
-                    <button
-                        type="submit"
-                        className="w-full py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-                    >
-                        Register
-                    </button>
+                    <Link to='/dashboard' >
+                        <button
+                            type="submit"
+                            className="w-full py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+                        >
+                            Register
+                        </button>
+                    </Link>
                 </form>
             </div>
         </div>
