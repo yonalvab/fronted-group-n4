@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+/* import React,{useState} from 'react';
 
 const Login = () => {
     const [email, setEmail]= useState('');
@@ -47,4 +47,4 @@ const Login = () => {
         );
     };
     
-    export default Login;
+    export default Login; */
