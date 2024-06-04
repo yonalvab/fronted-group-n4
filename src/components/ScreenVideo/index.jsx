@@ -1,12 +1,13 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 export const ScreenVideo = ({ isOpen, onClose }) => {
-    if (!isOpen) return null;
-
     const videoRef = useRef(null);
     const mediaRecorderRef = useRef(null);
     const [isRecording, setIsRecording] = useState(false);
     const [videoURL, setVideoURL] = useState('');
+    const [thumbnailURL, setThumbnailURL] = useState('');
+
+    if (!isOpen) return null;
 
     const startRecording = async () => {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -24,6 +25,7 @@ export const ScreenVideo = ({ isOpen, onClose }) => {
             const url = URL.createObjectURL(blob);
             setVideoURL(url);
             videoRef.current.srcObject = null;
+            crearMiniatura(url)
         };
 
         mediaRecorderRef.current.start();
@@ -46,6 +48,22 @@ export const ScreenVideo = ({ isOpen, onClose }) => {
         a.href = videoURL;
         a.download = 'recording.webm';
         a.click();
+    };
+
+    const crearMiniatura = (videoSrc) => {
+        const video = document.createElement('video');
+        video.src = videoSrc;
+        video.currentTime = 1; 
+
+        video.onloadeddata = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const thumbnail = canvas.toDataURL('image/png');
+            setThumbnailURL(thumbnail);
+        };
     };
 
     return (
@@ -105,6 +123,12 @@ export const ScreenVideo = ({ isOpen, onClose }) => {
                             <button onClick={downloadRecording} className='mt-4 bg-blue-600 text-white p-2 rounded'>Download Video</button>
                         </div>
                     )}
+                    {thumbnailURL && (
+                                <div>
+                                    <h3>Thumbnail:</h3>
+                                    <img src={thumbnailURL} alt="Thumbnail" style={{ width: '200px', height: '150px' }} />
+                                </div>
+                            )}
                 </div>
             </div>
         </div>
