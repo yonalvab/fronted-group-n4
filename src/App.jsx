@@ -3,9 +3,10 @@ import './index.css';
 import { Cards } from './components/Cards';
 import { InfoUser } from './components/InfoUser'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Login } from './components/Login';
+import  Login  from './components/Login';
 import Register from './components/Register';
 import { Dashboard } from './components/Dashboard';
+import Niveles from './components/Nivel/nivelConfig';
 
 function App() {
 
