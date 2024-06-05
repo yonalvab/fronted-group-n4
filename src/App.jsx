@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Login } from './components/Login';
 import Register from './components/Register';
 import { Dashboard } from './components/Dashboard';
+import VideoFeedback from './components/VideoFeedback';
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
           <Route path='/' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/dashboard' element={<Dashboard />} ></Route>
+          <Route path='/videoFeedback' element={<VideoFeedback />}></Route>
         </Routes>
       </main>
     </BrowserRouter>
