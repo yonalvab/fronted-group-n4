@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [usuario, setUsuario] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate(); // Añade el hook useNavigate
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,8 +23,15 @@ const Login = () => {
           'Content-Type': 'application/json',
         },
       });
+      
+      const { token } = response.data;
+      localStorage.setItem('token', token);
+
       setMessage(response.data.message);
       setError('');
+      
+      // Después de un inicio de sesión exitoso, navega al Dashboard
+      navigate('/dashboard');
     } catch (err) {
       setError(err.response.data.message);
       setMessage('');
