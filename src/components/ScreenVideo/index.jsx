@@ -2,8 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
 export const ScreenVideo = ({ isOpen, onClose }) => {
-    if (!isOpen) return null;
-
     const videoRef = useRef(null);
     const mediaRecorderRef = useRef(null);
     const [isRecording, setIsRecording] = useState(false);
@@ -19,6 +17,9 @@ export const ScreenVideo = ({ isOpen, onClose }) => {
             crearMiniatura(videoURL);
         }
     }, [videoURL]);
+    const [thumbnailURL, setThumbnailURL] = useState('');
+
+    if (!isOpen) return null;
 
     const startRecording = async () => {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -37,6 +38,7 @@ export const ScreenVideo = ({ isOpen, onClose }) => {
             setVideoURL(url);
             setVideoBlob(blob);
             videoRef.current.srcObject = null;
+            crearMiniatura(url)
         };
 
         mediaRecorderRef.current.start();
@@ -63,7 +65,6 @@ export const ScreenVideo = ({ isOpen, onClose }) => {
         a.download = 'recording.mp4';
         a.click();
     };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -115,8 +116,6 @@ export const ScreenVideo = ({ isOpen, onClose }) => {
             video.onerror = reject; // Manejo de errores si la carga del video falla
         });
     };
-
-
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" onClick={onClose}>
@@ -174,7 +173,12 @@ export const ScreenVideo = ({ isOpen, onClose }) => {
                             <button onClick={downloadRecording} className='mt-4 bg-blue-600 text-white p-2 rounded'>Download Video</button>
                         </div>
                     )}
-
+                    {thumbnailURL && (
+                                <div>
+                                    <h3>Thumbnail:</h3>
+                                    <img src={thumbnailURL} alt="Thumbnail" style={{ width: '200px', height: '150px' }} />
+                                </div>
+                            )}
                 </div>
             </div>
         </div>

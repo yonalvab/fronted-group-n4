@@ -1,12 +1,14 @@
 import React from 'react';
 import './index.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Login } from './components/Login';
+import  Login  from './components/Login';
 import Register from './components/Register';
 import { Dashboard } from './components/Dashboard';
 import { HomeWorks } from './components/Homeworks';
 import { Header } from './components/Header';
 import { UserProvider } from './services/UserContext';
+import VideoFeedback from './components/VideoFeedback';
+import Niveles from './components/Nivel/nivelConfig';
 
 function App() {
   return (
@@ -26,6 +28,9 @@ function App() {
               </div>
             </>
           } />
+          <Route path='/dashboard' element={<Dashboard />} ></Route>
+          <Route path='/videoFeedback' element={<VideoFeedback />}></Route>
+          <Route path='/dashboard/*' element={<Dashboard />} ></Route>
         </Routes>
       </BrowserRouter>
     </UserProvider>

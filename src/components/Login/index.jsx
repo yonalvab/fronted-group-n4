@@ -1,54 +1,94 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import IconUsuario from '../../assets/images.png';
+import IconContraseña from '../../assets/102643.png';
 
-export const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('');
+const Login = () => {
+  const [usuario, setUsuario] = useState('');
+  const [contrasena, setContrasena] = useState('');
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+  const navigate = useNavigate(); 
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        // Agregar logica del backend
-        setMessage('Login succesful');
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    const user = {
+      usuario,
+      contrasena,
     };
+    try {
+      const response = await axios.post('http://localhost:3000/api/usuarios/login', user, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      const { token } = response.data;
+      localStorage.setItem('token', token);
 
-    return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            <div className="max-w-md w-full bg-white p-8 shadow-lg rounded-lg">
-                <h2 className="text-2xl font-bold mb-8 text-center">Login</h2>
-                {message && <p className="text-red-500 text-center mb-4">{message}</p>}
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label className="block text-gray-700">Email</label>
-                        <input
-                            type="email"
-                            className="w-full px-3 py-2 border rounded"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
-                    <div className="mb-6">
-                        <label className="block text-gray-700">Password</label>
-                        <input
-                            type="password"
-                            className="w-full px-3 py-2 border rounded"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </div>
-                    <Link to='/app/dashboard' >
-                        <button
-                            type="submit"
-                            className="w-full py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-                        >
-                            Login
-                        </button>
-                    </Link>
-                    <Link to='/register' >
-                        <a href="">Register</a>
-                    </Link>
-                </form>
+      setMessage(response.data.message);
+      setError('');
+      
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err.response.data.message);
+      setMessage('');
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-purple-900">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {message && <p className="text-green-500 mb-4">{message}</p>}
+        <form onSubmit={handleLogin}>
+          <div className="mb-4 flex items-center">
+            <img src={IconUsuario} alt="Usuario" className="w-6 h-6 mr-2" />
+            <label className="block text-gray-700">Usuario:</label>
+            <input
+              type="text"
+              value={usuario}
+              onChange={(e) => setUsuario(e.target.value)}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              required
+            />
+          </div>
+          <div className="mb-4 flex items-center">
+            <img src={IconContraseña} alt="Contraseña" className="w-6 h-6 mr-2" />
+            <label className="block text-gray-700">Contraseña:</label>
+            <input
+              type="password"
+              value={contrasena}
+              onChange={(e) => setContrasena(e.target.value)}
+              className="w-full px- py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              required
+            />
+          </div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center">
+              <input type="checkbox" className="form-checkbox h-4 w-4 text-purple-600" />
+              <label className="ml-2 block text-gray-700">Remember me</label>
             </div>
-        </div>
-    );
+            <div>
+              <a href="#" className="text-purple-600 hover:underline">Forgot password?</a>
+            </div>
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-200"
+          >
+            Login
+          </button>
+        </form>
+        <p className="mt-4 text-center">
+          Don’t have an account? <a href="/register" className="text-purple-600 hover:underline">Register</a>
+        </p>
+      </div>
+    </div>
+  );
 };
+
+export default Login;
