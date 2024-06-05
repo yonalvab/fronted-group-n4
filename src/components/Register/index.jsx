@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';  // Importar useNavigate
+import { useNavigate } from 'react-router-dom';
+import IconContraseña from '../../assets/102643.png';
+import IconNombre from '../../assets/imagenNombre.png';
+import IconUsuario from '../../assets/images.png';
 
 const Register = () => {
   const [nombre, setNombre] = useState('');
@@ -10,8 +13,7 @@ const Register = () => {
   const [nivel, setNivel] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
-  
-  const navigate = useNavigate();  // Crear instancia de useNavigate
+  const navigate = useNavigate(); 
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -43,15 +45,13 @@ const Register = () => {
         },
       });
       
-      // Almacenar el token en localStorage
       const { token } = response.data;
       localStorage.setItem('token', token);
 
       setMessage('Registro exitoso');
       setError('');
       
-      // Redireccionar al usuario después del registro exitoso
-      navigate('/dashboard');  // Asegúrate de tener una ruta /dashboard en tu aplicación
+      navigate('/dashboard');  
     } catch (err) {
       setError(err.response.data.message);
       setMessage('');
@@ -65,7 +65,8 @@ const Register = () => {
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {message && <p className="text-green-500 mb-4">{message}</p>}
         <form onSubmit={handleRegister}>
-          <div className="mb-4">
+          <div className="mb-4 flex items-center">
+            <img src={IconNombre} alt="Nombre" className="w-6 h-6 mr-2" />
             <label className="block text-gray-700">Nombre:</label>
             <input
               type="text"
@@ -75,7 +76,8 @@ const Register = () => {
               required
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-4 flex items-center">
+            <img src={IconUsuario} alt="Usuario" className="w-6 h-6 mr-2" />
             <label className="block text-gray-700">Usuario:</label>
             <input
               type="text"
@@ -85,7 +87,8 @@ const Register = () => {
               required
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-4 flex items-center">
+            <img src={IconContraseña} alt="Contraseña" className="w-6 h-6 mr-2" />
             <label className="block text-gray-700">Contraseña:</label>
             <input
               type="password"
@@ -104,7 +107,7 @@ const Register = () => {
               required
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-4 flex items-center">
             <label className="block text-gray-700">Nivel:</label>
             <input
               type="number"

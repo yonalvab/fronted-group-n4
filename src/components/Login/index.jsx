@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import IconUsuario from '../../assets/images.png';
+import IconContraseña from '../../assets/102643.png';
 
 const Login = () => {
   const [usuario, setUsuario] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
-  const navigate = useNavigate(); // Añade el hook useNavigate
+  const navigate = useNavigate(); 
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -30,7 +32,6 @@ const Login = () => {
       setMessage(response.data.message);
       setError('');
       
-      // Después de un inicio de sesión exitoso, navega al Dashboard
       navigate('/dashboard');
     } catch (err) {
       setError(err.response.data.message);
@@ -45,7 +46,8 @@ const Login = () => {
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {message && <p className="text-green-500 mb-4">{message}</p>}
         <form onSubmit={handleLogin}>
-          <div className="mb-4">
+          <div className="mb-4 flex items-center">
+            <img src={IconUsuario} alt="Usuario" className="w-6 h-6 mr-2" />
             <label className="block text-gray-700">Usuario:</label>
             <input
               type="text"
@@ -55,13 +57,14 @@ const Login = () => {
               required
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-4 flex items-center">
+            <img src={IconContraseña} alt="Contraseña" className="w-6 h-6 mr-2" />
             <label className="block text-gray-700">Contraseña:</label>
             <input
               type="password"
               value={contrasena}
               onChange={(e) => setContrasena(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className="w-full px- py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
               required
             />
           </div>
