@@ -36,7 +36,7 @@ export const Login = () => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
-                    <Link to='/dashboard' >
+                    <Link to='/app/dashboard' >
                         <button
                             type="submit"
                             className="w-full py-2 bg-blue-500 text-white rounded hover:bg-blue-700"

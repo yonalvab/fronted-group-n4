@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 
 export const ScreenVideo = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
@@ -7,6 +8,17 @@ export const ScreenVideo = ({ isOpen, onClose }) => {
     const mediaRecorderRef = useRef(null);
     const [isRecording, setIsRecording] = useState(false);
     const [videoURL, setVideoURL] = useState('');
+    const [titulo, setTitulo] = useState('');
+    const [descripcion, setDescripcion] = useState('');
+    const [etiqueta, setEtiqueta] = useState('');
+    const [miniatura, setMiniatura] = useState(null);
+    const [videoBlob, setVideoBlob] = useState(null);
+
+    useEffect(() => {
+        if (videoURL) {
+            crearMiniatura(videoURL);
+        }
+    }, [videoURL]);
 
     const startRecording = async () => {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -23,6 +35,7 @@ export const ScreenVideo = ({ isOpen, onClose }) => {
             const blob = new Blob(chunks, { type: 'video/webm' });
             const url = URL.createObjectURL(blob);
             setVideoURL(url);
+            setVideoBlob(blob);
             videoRef.current.srcObject = null;
         };
 
@@ -30,10 +43,13 @@ export const ScreenVideo = ({ isOpen, onClose }) => {
         setIsRecording(true);
     };
 
-    const stopRecording = () => {
+    const stopRecording = async () => {
         mediaRecorderRef.current.stop();
         videoRef.current.srcObject.getTracks().forEach(track => track.stop());
         setIsRecording(false);
+        const thumbnail = await crearMiniatura(videoURL); // Espera a que se complete la creación de la miniatura
+        // Ahora puedes usar 'thumbnail' si es necesario
+        handleSubmit(); // Después de que se complete la creación de la miniatura, llama a handleSubmit
     };
 
     const restartRecording = () => {
@@ -44,33 +60,87 @@ export const ScreenVideo = ({ isOpen, onClose }) => {
     const downloadRecording = () => {
         const a = document.createElement('a');
         a.href = videoURL;
-        a.download = 'recording.webm';
+        a.download = 'recording.mp4';
         a.click();
     };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const formData = new FormData();
+            formData.append('titulo', titulo);
+            formData.append('descripcion', descripcion);
+            formData.append('etiqueta', etiqueta);
+            formData.append('usuarioId', '665eae6a2ca2fe2fb12fcb60');
+            formData.append('miniatura', miniatura);
+            /* if (miniatura) {
+            } */
+            console.log(miniatura);
+            if (videoBlob) {
+                const videoFile = new File([videoBlob], 'video.mp4', { type: 'video/mp4' });
+                formData.append('video', videoFile);
+            }
+
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}:`, value);
+            }
+
+            const response = await axios.post('http://localhost:3000/api/videos/subir', formData
+            );
+
+            // Manejo de la respuesta si es necesario
+        } catch (error) {
+            // Manejo de errores si la solicitud falla
+            console.error('Error al subir el video:', error);
+        }
+    };
+
+
+
+    const crearMiniatura = (videoSrc) => {
+        return new Promise((resolve, reject) => {
+            const video = document.createElement('video');
+            video.src = videoSrc;
+            video.currentTime = 1;
+            video.onloadeddata = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const context = canvas.getContext('2d');
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const thumbnail = canvas.toDataURL('image/png');
+                setMiniatura(thumbnail);
+                resolve(thumbnail); // Resuelve la promesa con la miniatura
+            };
+            video.onerror = reject; // Manejo de errores si la carga del video falla
+        });
+    };
+
+
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" onClick={onClose}>
             <div className=" bg-slate-200 bg-opacity-80 p-2 shadow-lg max-w-5xl w-full flex flex-col justify-center items-center h-[500px] max-h-[500px] gap-9 rounded-2xl" onClick={(e) => e.stopPropagation()}>
                 <div className='flex items-center gap-8'>
-
                     <video ref={videoRef} autoPlay muted={!videoURL} controls={!!videoURL} style={{ width: '400px', height: '300px', marginTop: '25px' }}>
                         {videoURL && <source src={videoURL} type="video/webm" />}
                     </video>
                     {videoURL && (
                         <div >
-                            <form className=" h-[300px] w-[380px] px-8 mt-[25px] rounded-xl flex flex-col gap-3 bg-white justify-center " >
+                            <form onSubmit={handleSubmit} className=" h-[300px] w-[380px] px-8 mt-[25px] rounded-xl flex flex-col gap-3 bg-white justify-center " >
                                 <label className="flex flex-col">
-                                    Titulo:
-                                    <input type="text" className="p-2 border border-gray-300 rounded" />
+                                    Título:
+                                    <input type="text" className="p-2 border border-gray-300 rounded" value={titulo} onChange={(e) => setTitulo(e.target.value)} />
                                 </label>
                                 <label className="flex flex-col">
-                                    Descripcion:
-                                    <input type="text" className="p-2 border border-gray-300 rounded" />
+                                    Descripción:
+                                    <input type="text" className="p-2 border border-gray-300 rounded" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} />
                                 </label>
                                 <label className="flex flex-col">
-                                    Miniatura:
-                                    <input type='file' />
+                                    etiqueta:
+                                    <input type="text" className="p-2 border border-gray-300 rounded" value={etiqueta} onChange={(e) => setEtiqueta(e.target.value)} />
                                 </label>
+                                <input className='hidden' value={miniatura} name='miniatura' />
                                 <button type="submit" className="bg-blue-600 text-white p-2 rounded">Submit</button>
                             </form>
                         </div>
@@ -78,15 +148,11 @@ export const ScreenVideo = ({ isOpen, onClose }) => {
                 </div>
                 <div>
                     {isRecording ? (
-
-
                         <button className='bg-gray-600 h-14 w-14 flex items-center justify-center rounded-full' onClick={stopRecording}>
                             <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#FFFFFF">
                                 <path d="M326.67-326.67h306.66v-306.66H326.67v306.66ZM480.18-80q-82.83 0-155.67-31.5-72.84-31.5-127.18-85.83Q143-251.67 111.5-324.56T80-480.33q0-82.88 31.5-155.78Q143-709 197.33-763q54.34-54 127.23-85.5T480.33-880q82.88 0 155.78 31.5Q709-817 763-763t85.5 127Q880-563 880-480.18q0 82.83-31.5 155.67Q817-251.67 763-197.46q-54 54.21-127 85.84Q563-80 480.18-80Zm.15-66.67q139 0 236-97.33t97-236.33q0-139-96.87-236-96.88-97-236.46-97-138.67 0-236 96.87-97.33 96.88-97.33 236.46 0 138.67 97.33 236 97.33 97.33 236.33 97.33ZM480-480Z" />
                             </svg>
-
                         </button>
-
                     ) : (
                         <div className='flex gap-4'>
                             <button className='bg-gray-600 h-14 w-14 flex items-center justify-center rounded-full' onClick={startRecording}>
@@ -105,10 +171,10 @@ export const ScreenVideo = ({ isOpen, onClose }) => {
                     )}
                     {videoURL && (
                         <div>
-
                             <button onClick={downloadRecording} className='mt-4 bg-blue-600 text-white p-2 rounded'>Download Video</button>
                         </div>
                     )}
+
                 </div>
             </div>
         </div>
