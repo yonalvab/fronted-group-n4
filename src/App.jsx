@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import  Login  from './components/Login';
 import Register from './components/Register';
 import { Dashboard } from './components/Dashboard';
+import VideoFeedback from './components/VideoFeedback';
 import Niveles from './components/Nivel/nivelConfig';
 
 function App() {
@@ -16,7 +17,10 @@ function App() {
         <Routes>
           <Route path='/' element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/dashboard' element={<Dashboard />} ></Route>
+          <Route path='/videoFeedback' element={<VideoFeedback />}></Route>
           <Route path='/dashboard/*' element={<Dashboard />} ></Route>
+
         </Routes>
       </main>
     </BrowserRouter>
