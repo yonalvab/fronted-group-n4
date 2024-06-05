@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import CryptoJS from 'crypto-js';
 import IconContraseña from '../../assets/102643.png';
 import IconNombre from '../../assets/imagenNombre.png';
 import IconUsuario from '../../assets/images.png';
+import './style.css';
 
 const Register = () => {
   const [nombre, setNombre] = useState('');
@@ -11,9 +13,22 @@ const Register = () => {
   const [contrasena, setContrasena] = useState('');
   const [imagenPerfil, setImagenPerfil] = useState('');
   const [nivel, setNivel] = useState('');
+  const [niveles, setNiveles] = useState([]); 
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchNiveles = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/niveles');
+        setNiveles(response.data); 
+      } catch (error) {
+        console.error('Error fetching niveles:', error);
+      }
+    };
+    fetchNiveles();
+  }, []);
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -44,14 +59,15 @@ const Register = () => {
           'Content-Type': 'application/json',
         },
       });
-      
+
       const { token } = response.data;
-      localStorage.setItem('token', token);
+      const encryptedToken = CryptoJS.AES.encrypt(token, 'secret-key').toString();
+      localStorage.setItem('token', encryptedToken);
 
       setMessage('Registro exitoso');
       setError('');
-      
-      navigate('/dashboard');  
+
+      navigate('/dashboard');
     } catch (err) {
       setError(err.response.data.message);
       setMessage('');
@@ -59,7 +75,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-purple-900">
+    <div className="min-h-screen flex items-center justify-center register-bg">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -109,17 +125,21 @@ const Register = () => {
           </div>
           <div className="mb-4 flex items-center">
             <label className="block text-gray-700">Nivel:</label>
-            <input
-              type="number"
+            <select
               value={nivel}
               onChange={(e) => setNivel(e.target.value)}
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
               required
-            />
+            >
+              <option value="">Selecciona un nivel</option>
+              {niveles.map((nivel) => (
+                <option key={nivel._id} value={nivel._id}>{nivel.nombre}</option>
+              ))}
+            </select>
           </div>
           <button
             type="submit"
-            className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-200" 
+            className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-200"
           >
             Registrar
           </button>
