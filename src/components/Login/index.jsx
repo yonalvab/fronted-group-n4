@@ -1,82 +1,83 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-export const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('');
+const Login = () => {
+  const [usuario, setUsuario] = useState('');
+  const [contrasena, setContrasena] = useState('');
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
-        try {
-            const response = await fetch('/usuarios/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }), // shorthand for { email: email, password: password }
-            });
-
-            if (response.ok) {
-                setMessage('Login successful');
-                // Aquí podrías redirigir al usuario a otra página si el login es exitoso
-            } else {
-                const data = await response.json();
-                setMessage(data.message || 'Error: Unable to login.');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            setMessage('Error: Unable to login. Please try again later.');
-        }
+    const user = {
+      usuario,
+      contrasena,
     };
 
-    return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-purple-700 to-purple-900">
-            <div className="max-w-md w-full bg-white bg-opacity-10 p-8 shadow-lg rounded-lg">
-                <h2 className="text-3xl font-bold mb-8 text-center text-white">Login</h2>
-                {message && <p className="text-red-500 text-center mb-4">{message}</p>}
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label className="block text-white">Username</label>
-                        <input
-                            type="text"
-                            className="w-full px-3 py-2 border border-white rounded bg-transparent text-white"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
-                    <div className="mb-6">
-                        <label className="block text-white">Password</label>
-                        <input
-                            type="password"
-                            className="w-full px-3 py-2 border border-white rounded bg-transparent text-white"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </div>
-                    <div className="flex items-center justify-between mb-4">
-                        <div>
-                            <input type="checkbox" className="mr-2" />
-                            <span className="text-white">Remember me</span>
-                        </div>
-                        <Link to="/forgot-password" className="text-white hover:underline">
-                            Forgot password?
-                        </Link>
-                    </div>
-                    <button
-                        type="submit"
-                        className="w-full py-2 bg-white text-purple-700 rounded hover:bg-gray-200"
-                    >
-                        Login
-                    </button>
-                </form>
-                <div className="text-center mt-4">
-                    <Link to="/register" className="text-white hover:underline">
-                        Don't have an account? Register
-                    </Link>
-                </div>
+    try {
+      const response = await axios.post('http://localhost:3000/api/usuarios/login', user, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      setMessage(response.data.message);
+      setError('');
+    } catch (err) {
+      setError(err.response.data.message);
+      setMessage('');
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-purple-900">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {message && <p className="text-green-500 mb-4">{message}</p>}
+        <form onSubmit={handleLogin}>
+          <div className="mb-4">
+            <label className="block text-gray-700">Usuario:</label>
+            <input
+              type="text"
+              value={usuario}
+              onChange={(e) => setUsuario(e.target.value)}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Contraseña:</label>
+            <input
+              type="password"
+              value={contrasena}
+              onChange={(e) => setContrasena(e.target.value)}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              required
+            />
+          </div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center">
+              <input type="checkbox" className="form-checkbox h-4 w-4 text-purple-600" />
+              <label className="ml-2 block text-gray-700">Remember me</label>
             </div>
-        </div>
-    );
+            <div>
+              <a href="#" className="text-purple-600 hover:underline">Forgot password?</a>
+            </div>
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-200"
+          >
+            Login
+          </button>
+        </form>
+        <p className="mt-4 text-center">
+          Don’t have an account? <a href="/register" className="text-purple-600 hover:underline">Register</a>
+        </p>
+      </div>
+    </div>
+  );
 };
+
+export default Login;

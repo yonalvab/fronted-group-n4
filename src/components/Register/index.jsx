@@ -1,90 +1,129 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';  // Importar useNavigate
 
 const Register = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [message, setMessage] = useState('');
+  const [nombre, setNombre] = useState('');
+  const [usuario, setUsuario] = useState('');
+  const [contrasena, setContrasena] = useState('');
+  const [imagenPerfil, setImagenPerfil] = useState('');
+  const [nivel, setNivel] = useState('');
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+  
+  const navigate = useNavigate();  // Crear instancia de useNavigate
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagenPerfil(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
 
-        if (password !== confirmPassword) {
-            setMessage('Passwords do not match');
-            return;
-        }
+  const handleRegister = async (e) => {
+    e.preventDefault();
 
-        try {
-            const response = await fetch('/usuarios/registro', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }), // shorthand for { email: email, password: password }
-            });
-
-            if (response.ok) {
-                setMessage('Registration successful');
-                // Aquí podrías redirigir al usuario a otra página si el registro es exitoso
-            } else {
-                const data = await response.json();
-                setMessage(data.message || 'Error: Unable to register.');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            setMessage('Error: Unable to register. Please try again later.');
-        }
+    const newUser = {
+      nombre,
+      usuario,
+      contrasena,
+      imagenPerfil,
+      nivel,
+      rol: 'user',
+      videos: [],
+      fechaCreacion: new Date().toISOString(),
     };
 
-    return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-purple-700 to-purple-900">
-            <div className="max-w-md w-full bg-white bg-opacity-10 p-8 shadow-lg rounded-lg">
-                <h2 className="text-3xl font-bold mb-8 text-center text-white">Register</h2>
-                {message && <p className="text-red-500 text-center mb-4">{message}</p>}
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label className="block text-white">Email</label>
-                        <input
-                            type="email"
-                            className="w-full px-3 py-2 border border-white rounded bg-transparent text-white"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label className="block text-white">Password</label>
-                        <input
-                            type="password"
-                            className="w-full px-3 py-2 border border-white rounded bg-transparent text-white"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </div>
-                    <div className="mb-6">
-                        <label className="block text-white">Confirm Password</label>
-                        <input
-                            type="password"
-                            className="w-full px-3 py-2 border border-white rounded bg-transparent text-white"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        className="w-full py-2 bg-white text-purple-700 rounded hover:bg-gray-200"
-                    >
-                        Register
-                    </button>
-                </form>
-                <div className="text-center mt-4">
-                    <Link to="/login" className="text-white hover:underline">
-                        Already have an account? Login
-                    </Link>
-                </div>
-            </div>
-        </div>
-    );
+    try {
+      const response = await axios.post('http://localhost:3000/api/usuarios/registro', newUser, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      // Almacenar el token en localStorage
+      const { token } = response.data;
+      localStorage.setItem('token', token);
+
+      setMessage('Registro exitoso');
+      setError('');
+      
+      // Redireccionar al usuario después del registro exitoso
+      navigate('/dashboard');  // Asegúrate de tener una ruta /dashboard en tu aplicación
+    } catch (err) {
+      setError(err.response.data.message);
+      setMessage('');
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-purple-900">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {message && <p className="text-green-500 mb-4">{message}</p>}
+        <form onSubmit={handleRegister}>
+          <div className="mb-4">
+            <label className="block text-gray-700">Nombre:</label>
+            <input
+              type="text"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Usuario:</label>
+            <input
+              type="text"
+              value={usuario}
+              onChange={(e) => setUsuario(e.target.value)}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Contraseña:</label>
+            <input
+              type="password"
+              value={contrasena}
+              onChange={(e) => setContrasena(e.target.value)}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Imagen de Perfil:</label>
+            <input
+              type="file"
+              onChange={handleImageUpload}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Nivel:</label>
+            <input
+              type="number"
+              value={nivel}
+              onChange={(e) => setNivel(e.target.value)}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-200" 
+          >
+            Registrar
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default Register;
