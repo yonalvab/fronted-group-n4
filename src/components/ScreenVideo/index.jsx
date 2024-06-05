@@ -68,15 +68,35 @@ export const ScreenVideo = ({ isOpen, onClose }) => {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" onClick={onClose}>
-            <div className="  bg-white p-2 shadow-lg max-w-5xl w-full flex flex-col justify-center items-center h-[500px] max-h-[500px] gap-9 rounded-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className=" bg-slate-200 bg-opacity-80 p-2 shadow-lg max-w-5xl w-full flex flex-col justify-center items-center h-[500px] max-h-[500px] gap-9 rounded-2xl" onClick={(e) => e.stopPropagation()}>
                 <div className='flex items-center gap-8'>
+
                     <video ref={videoRef} autoPlay muted={!videoURL} controls={!!videoURL} style={{ width: '400px', height: '300px', marginTop: '25px' }}>
                         {videoURL && <source src={videoURL} type="video/webm" />}
                     </video>
-
+                    {videoURL && (
+                        <div >
+                            <form className=" h-[300px] w-[380px] px-8 mt-[25px] rounded-xl flex flex-col gap-3 bg-white justify-center " >
+                                <label className="flex flex-col">
+                                    Titulo:
+                                    <input type="text" className="p-2 border border-gray-300 rounded" />
+                                </label>
+                                <label className="flex flex-col">
+                                    Descripcion:
+                                    <input type="text" className="p-2 border border-gray-300 rounded" />
+                                </label>
+                                <label className="flex flex-col">
+                                    Miniatura:
+                                    <input type='file' />
+                                </label>
+                                <button type="submit" className="bg-blue-600 text-white p-2 rounded">Submit</button>
+                            </form>
+                        </div>
+                    )}
                 </div>
                 <div>
                     {isRecording ? (
+
 
                         <button className='bg-gray-600 h-14 w-14 flex items-center justify-center rounded-full' onClick={stopRecording}>
                             <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#FFFFFF">
@@ -103,23 +123,7 @@ export const ScreenVideo = ({ isOpen, onClose }) => {
                     )}
                     {videoURL && (
                         <div>
-                            <div className='' >
-                                <form className="flex flex-col gap-4">
-                                    <label className="flex flex-col">
-                                        Name:
-                                        <input type="text" className="p-2 border border-gray-300 rounded" />
-                                    </label>
-                                    <label className="flex flex-col">
-                                        Email:
-                                        <input type="email" className="p-2 border border-gray-300 rounded" />
-                                    </label>
-                                    <label className="flex flex-col">
-                                        Message:
-                                        <textarea className="p-2 border border-gray-300 rounded" rows="4"></textarea>
-                                    </label>
-                                    <button type="submit" className="bg-blue-600 text-white p-2 rounded">Submit</button>
-                                </form>
-                            </div>
+
                             <button onClick={downloadRecording} className='mt-4 bg-blue-600 text-white p-2 rounded'>Download Video</button>
                         </div>
                     )}
