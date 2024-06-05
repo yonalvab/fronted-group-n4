@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import IconContraseña from '../../assets/102643.png';
 import IconNombre from '../../assets/imagenNombre.png';
 import IconUsuario from '../../assets/images.png';

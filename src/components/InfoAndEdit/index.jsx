@@ -107,7 +107,7 @@ export const EditMyInfo = () => {
                     <input type="text" />
                 </div>
             </div>
-            <Link to='/dashboard' >
+            <Link to='/app/dashboard' >
                 <button className=' h-[50px] w-[90px] bg-lime-600 rounded-2xl text-white font-bold ' >Guardar</button>
             </Link>
         </>

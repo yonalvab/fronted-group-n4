@@ -1,34 +1,44 @@
-import { useState } from 'react';
+import React from 'react';
 import './index.css';
-import { Cards } from './components/Cards';
-import { InfoUser } from './components/InfoUser'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import  Login  from './components/Login';
 import Register from './components/Register';
 import { Dashboard } from './components/Dashboard';
+import { HomeWorks } from './components/Homeworks';
+import { Header } from './components/Header';
+import { UserProvider } from './services/UserContext';
 import VideoFeedback from './components/VideoFeedback';
 import Niveles from './components/Nivel/nivelConfig';
 
 function App() {
-
   return (
-    <BrowserRouter>
-      <main className='h-screen w-full flex flex-col px-6 gap-3'>
+    <UserProvider>
+      <BrowserRouter>
         <Routes>
           <Route path='/' element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/app/*' element={
+            <>
+              <Header />
+              <div className='h-screen w-full flex flex-col px-6 gap-3 border-b'>
+                <Routes>
+                  <Route path='dashboard/*' element={<Dashboard />} />
+                  <Route path='homeworks' element={<HomeWorks />} />
+                </Routes>
+              </div>
+            </>
+          } />
           <Route path='/dashboard' element={<Dashboard />} ></Route>
           <Route path='/videoFeedback' element={<VideoFeedback />}></Route>
           <Route path='/dashboard/*' element={<Dashboard />} ></Route>
-
         </Routes>
-      </main>
-    </BrowserRouter>
-
+      </BrowserRouter>
+    </UserProvider>
   );
 }
 
 export default App;
+
 {/* {currentView === 'home' && (
 )}
 

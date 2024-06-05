@@ -18,7 +18,6 @@ const Login = () => {
       usuario,
       contrasena,
     };
-
     try {
       const response = await axios.post('http://localhost:3000/api/usuarios/login', user, {
         headers: {
