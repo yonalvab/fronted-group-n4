@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import  Login  from './components/Login';
+import Login from './components/Login';
 import Register from './components/Register';
 import { Dashboard } from './components/Dashboard';
 import { HomeWorks } from './components/Homeworks';
@@ -28,7 +28,6 @@ function App() {
               </div>
             </>
           } />
-          <Route path='/dashboard' element={<Dashboard />} ></Route>
           <Route path='/videoFeedback' element={<VideoFeedback />}></Route>
           <Route path='/dashboard/*' element={<Dashboard />} ></Route>
         </Routes>
