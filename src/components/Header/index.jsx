@@ -21,14 +21,13 @@ export const Header = () => {
                                 <div className='w-7 border-r-2'>
                                     <img className='h-5 w-5' src={lupa} alt="Search" />
                                 </div>
-                                <input className='w-[380px] ml-1 focus:outline-none' type="text" placeholder='Excribe algo euu' />
+                                <input className='w-[380px] ml-1 focus:outline-none' type="text" placeholder='Escribe aqui...' />
 
                             </div>
-                            <input className='w-[380px] ml-1 focus:outline-none' type="text" placeholder='Escribe aqui' />
+                            
                         </div>
-
-                    </div>
                 </Link>
+                </div>
                 <div className=' flex gap-3 ' >
 
                     <Link to="/app/dashboard" >
