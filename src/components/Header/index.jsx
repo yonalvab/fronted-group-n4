@@ -8,8 +8,8 @@ export const Header = () => {
     const [modal, setModal] = useState(false);
     return (
         <>
-            <header className='bg-slate-300 h-14 w-full flex items-center pr-9 pl-2 mt-3 mb-2 justify-between rounded-full'>
-                <div className='flex items-center justify-between  '>
+            <header className='w-full flex items-center justify-between rounded-none bg-white m-0 px-16 h-20 shadow-lg z-20 fixed'>
+                <div className='flex items-center justify-between w-full'>
                     <Link to="/app/dashboard" >
                         <div className='flex items-center' >
                             <div className='flex items-center gap-[2px]'>

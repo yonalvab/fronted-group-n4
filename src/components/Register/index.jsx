@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
 import { Link, useNavigate } from 'react-router-dom';
 import IconContraseña from '../../assets/102643.png';
@@ -9,11 +8,13 @@ import IconUsuario from '../../assets/images.png';
 import './style.css';
 
 const Register = () => {
-  const [nombre, setNombre] = useState('');
-  const [usuario, setUsuario] = useState('');
-  const [contrasena, setContrasena] = useState('');
-  const [imagenPerfil, setImagenPerfil] = useState('');
-  const [nivel, setNivel] = useState('');
+  const [formData, setFormData] = useState({
+    nombre: '',
+    usuario: '',
+    contrasena: '',
+    imagenPerfil: null,
+    nivel: ''
+  });
   const [niveles, setNiveles] = useState([]); 
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
@@ -31,33 +32,40 @@ const Register = () => {
     fetchNiveles();
   }, []);
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = useCallback((e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagenPerfil(reader.result);
-    };
-    reader.readAsDataURL(file);
-  };
+    setFormData((prevData) => ({
+      ...prevData,
+      imagenPerfil: file,
+    }));
+  }, []);
+
+  const handleInputChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  }, []);
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    const newUser = {
-      nombre,
-      usuario,
-      contrasena,
-      imagenPerfil,
-      nivel,
-      rol: 'user',
-      videos: [],
-      fechaCreacion: new Date().toISOString(),
-    };
+    const { nombre, usuario, contrasena, imagenPerfil, nivel } = formData;
+    const formDataToSend = new FormData();
+    formDataToSend.append('nombre', nombre);
+    formDataToSend.append('usuario', usuario);
+    formDataToSend.append('contrasena', contrasena);
+    formDataToSend.append('nivel', nivel);
+    formDataToSend.append('imagenPerfil', imagenPerfil);
+    formDataToSend.append('rol', 'user');
+    formDataToSend.append('videos', JSON.stringify([]));
+    formDataToSend.append('fechaCreacion', new Date().toISOString());
 
     try {
-      const response = await axios.post('http://localhost:3000/api/usuarios/registro', newUser, {
+      const response = await axios.post('http://localhost:3000/api/usuarios/registro', formDataToSend, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
       });
 
@@ -70,7 +78,7 @@ const Register = () => {
 
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response.data.message);
+      setError(err.response?.data?.message || 'Error al registrar');
       setMessage('');
     }
   };
@@ -87,8 +95,9 @@ const Register = () => {
             <label className="block text-gray-700">Nombre:</label>
             <input
               type="text"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
+              name="nombre"
+              value={formData.nombre}
+              onChange={handleInputChange}
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
               required
             />
@@ -98,8 +107,9 @@ const Register = () => {
             <label className="block text-gray-700">Usuario:</label>
             <input
               type="text"
-              value={usuario}
-              onChange={(e) => setUsuario(e.target.value)}
+              name="usuario"
+              value={formData.usuario}
+              onChange={handleInputChange}
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
               required
             />
@@ -109,8 +119,9 @@ const Register = () => {
             <label className="block text-gray-700">Contraseña:</label>
             <input
               type="password"
-              value={contrasena}
-              onChange={(e) => setContrasena(e.target.value)}
+              name="contrasena"
+              value={formData.contrasena}
+              onChange={handleInputChange}
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
               required
             />
@@ -127,8 +138,9 @@ const Register = () => {
           <div className="mb-4 flex items-center">
             <label className="block text-gray-700">Nivel:</label>
             <select
-              value={nivel}
-              onChange={(e) => setNivel(e.target.value)}
+              name="nivel"
+              value={formData.nivel}
+              onChange={handleInputChange}
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
               required
             >
