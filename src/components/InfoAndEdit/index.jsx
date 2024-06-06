@@ -34,20 +34,13 @@ export const InfoDefault = () => {
             <div className=' w-[370px] h-[290px] bg-white rounded-3xl flex flex-col gap-4 items-center justify-center  ' >
                 <div className=' flex items-center w-[340px] h-[40px]  gap-3' >
                     <div className=' w-[95px] border-r-2 border-x-neutral-400 ' >Nombre :</div>
-                    <div>Yon Alva</div>
+                    <div>Joseph Yagual</div>
                 </div>
                 <div className=' flex items-center w-[340px] h-[40px] gap-3'>
                     <div className=' w-[95px] border-r-2 border-x-neutral-400 ' >Email :</div>
-                    <div>yonalva@gmail.com</div>
+                    <div>1jostyace@gmail.com</div>
                 </div>
-                <div className=' flex items-center w-[340px] h-[40px] gap-3' >
-                    <div className=' w-[95px] border-r-2 border-x-neutral-400 ' >Celular :</div>
-                    <div>945432681</div>
-                </div>
-                <div className=' flex items-center w-[340px] h-[40px] gap-3' >
-                    <div className=' w-[95px] border-r-2 border-x-neutral-400 ' >Direccion :</div>
-                    <div>El Cielo #1075</div>
-                </div>
+ 
                 <div className=' flex items-center w-[340px] h-[40px] gap-3' >
                     <div className=' w-[95px] border-r-2 border-x-neutral-400 ' >Contraseña :</div>
                     <div>**********</div>

@@ -15,15 +15,15 @@ export const TeacherDashboard = () => {
       <div className='w-full h-64 flex justify-center items-center  grid grid-cols-3 gap-8 overflow-y-auto'>
         {/* {error && <p>{error}</p>} */}
         <div className="flex justify-center items-center">
-        <Link to="/app/niveles" className="w-4/6 bg-red-600 hover:bg-red-500 text-white flex items-center gap-2 justify-center text-xl rounded-md h-32" ><FaGripHorizontal /> NIVELES</Link>
+        <Link to="/app/niveles" className="w-4/6 bg-slate-950 hover:bg-slate-900 text-white flex items-center gap-2 justify-center text-xl rounded-md h-32" ><FaGripHorizontal /> NIVELES</Link>
 
         </div>
         <div className="flex justify-center items-center">
-        <Link to="/app/alumnos" className="w-4/6 bg-red-600 hover:bg-red-500 text-white flex items-center gap-2 justify-center text-xl rounded-md h-32" ><FaUserFriends /> ESTUDIANTES</Link>
+        <Link to="/app/alumnos" className="w-4/6 bg-slate-950 hover:bg-slate-900 text-white flex items-center gap-2 justify-center text-xl rounded-md h-32" ><FaUserFriends /> ESTUDIANTES</Link>
 
         </div>
         <div className="flex justify-center items-center">
-        <Link to="/app/tareas" className="w-4/6 bg-red-600 hover:bg-red-500 text-white flex items-center gap-2 justify-center text-xl rounded-md h-32" ><FaTasks />
+        <Link to="/app/tareas" className="w-4/6 bg-slate-950 hover:bg-slate-900 text-white flex items-center gap-2 justify-center text-xl rounded-md h-32" ><FaTasks />
  TAREAS</Link>
 
         </div>
