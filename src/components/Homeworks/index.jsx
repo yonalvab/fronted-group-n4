@@ -8,8 +8,15 @@ export const HomeWorks = () => {
 
   useEffect(() => {
     const fetchTareas = async () => {
+      const nivelId = localStorage.getItem('nivelId'); // Obtener el nivelId del localStorage
+
+      if (!nivelId) {
+        setError('No se encontró el ID del nivel en el localStorage');
+        return;
+      }
+
       try {
-        const response = await axios.get('http://localhost:3000/api/tareas/nivel/6660a38314a920cdddc220d9');
+        const response = await axios.get(`http://localhost:3000/api/tareas/nivel/${nivelId}`);
         setTareas(response.data);
       } catch (error) {
         setError('Error al obtener las tareas');

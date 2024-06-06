@@ -15,17 +15,24 @@ body {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #888;
+  background: #2c7de155;
   border-radius: 5px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #000;
+  background: #043764;
   border-radius: 5px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #2c7de1;
+}
+
+.video-marker {
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  top: -50px;
+  cursor: pointer;
 }

@@ -72,7 +72,8 @@ export const ScreenVideo = ({ isOpen, onClose }) => {
       formData.append('titulo', titulo);
       formData.append('descripcion', descripcion);
       formData.append('etiqueta', etiqueta);
-      formData.append('usuarioId', '665eae6a2ca2fe2fb12fcb60');
+      const userId = localStorage.getItem('userId'); 
+            formData.append('usuarioId', userId);
 
       if (videoBlob) {
         const videoFile = new File([videoBlob], 'video.mp4', { type: 'video/mp4' });

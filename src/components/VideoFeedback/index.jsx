@@ -13,16 +13,16 @@ const VideoFeedback = () => {
   const [activeMarker, setActiveMarker] = useState(null);
   const [videoUrl, setVideoUrl] = useState('');
   const { id } = useParams(); 
-  const videoId = id 
+  const videoId = id; 
   const userId = '665f6b3da3f461502bc0c185'; 
 
 
   useEffect(() => {
     const fetchVideoUrl = async () => {
-      console.log(videoId)
+      console.log(videoId);
       try {
         const response = await axios.get(`http://localhost:3000/api/videos/${videoId}`);
-console.log(response)
+        console.log(response);
         setVideoUrl(`http://localhost:3000/uploads/videos/${response.data.video}`);
       } catch (error) {
         console.error('Error fetching video URL:', error);
@@ -46,9 +46,10 @@ console.log(response)
 
   const handleAddMarker = () => {
     if (playerRef.current) {
-      setCurrentTime(playerRef.current.getCurrentTime());
-      setActiveMarker(currentTime);
-      setMarkers([...markers, { timestamp: currentTime, comment: '' }]);
+      const current = playerRef.current.getCurrentTime();
+      setCurrentTime(current);
+      setActiveMarker(current);
+      setMarkers([...markers, { timestamp: current, comment: '' }]);
     }
   };
 
@@ -60,7 +61,7 @@ console.log(response)
 
     const newMarker = {
       videoId: id,
-      userId: '665eae6a2ca2fe2fb12fcb60', // Ajusta este ID según tu lógica
+      userId: userId,
       timestamp: activeMarker,
       comment
     };
@@ -84,6 +85,7 @@ console.log(response)
   const handleMarkerClick = (time) => {
     if (playerRef.current) {
       playerRef.current.seekTo(time, 'seconds');
+      setActiveMarker(time);
     }
   };
 
@@ -94,66 +96,74 @@ console.log(response)
   };
 
   return (
-    <div style={{ display: 'flex' }}>
-      <div style={{ flex: 1, position: 'relative' }}>
-        {videoUrl && (
-          <ReactPlayer
-            ref={playerRef}
-            url={videoUrl}
-            controls
-            onProgress={handleProgress}
-            width='100%'
-            height='50%'
-          />
-        )}
-        
-        <div className='!bg-black' style={{ marginTop: '0px', position: 'relative', height: '10px', background: '#eee' }}>
-          {playerRef.current && markers.map((marker, index) => (
-            <div
-              key={index}
-              onClick={() => handleMarkerClick(marker.timestamp)}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: `${(marker.timestamp / playerRef.current.getDuration()) * 100}%`,
-                backgroundColor: 'red',
-                height: '10px',
-                width: '2px',
-                cursor: 'pointer',
-              }}
-              title={marker.comment}
+    <div className="flex flex-col gap-7 h-[90%] rounded-3xl bg-white px-16 py-14">
+      <div className="w-full flex flex-col justify-center items-center text-slate-800 font-black text-4xl">
+        VIDEO FEEDBACK
+      </div>
+
+      <div className='w-full h-auto flex'>
+        <div className='w-4/6 h-auto'>
+          {videoUrl && (
+            <ReactPlayer
+              ref={playerRef}
+              url={videoUrl}
+              controls
+              onProgress={handleProgress}
+              width='100%'
+              height='50%'
             />
+          )}
+          
+          <div className='ml-[14px] mr-[14px]' style={{ marginTop: '0px', position: 'relative', height: '10px', background: '#eee' }}>
+            {playerRef.current && markers.map((marker, index) => (
+              <div
+                className={`absolute w-5 h-5 video-marker ${marker.timestamp === activeMarker ? 'bg-red-500' : 'bg-blue-500'}`}
+                key={index}
+                onClick={() => handleMarkerClick(marker.timestamp)}
+                style={{
+                  left: `${(marker.timestamp / playerRef.current.getDuration()) * 100}%`,
+                }}
+                title={marker.comment}
+              />
+            ))}
+          </div>
+          <div className='flex mt-[10px] h-[60px] items-center'>  
+            <button className='bg-[#2c7de1] text-white p-2 rounded-3xl px-4 hover:bg-[#053763]' onClick={handleAddMarker}>
+              Add Feedback
+            </button>
+            {activeMarker !== null && (
+              <div>
+                <input
+                  className='ml-6 bg-slate-200 w-[300px] border-2 border-gray-500 rounded-full h-[60px]'
+                  type="text"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  placeholder="Enter your comment"
+                  style={{ marginRight: '10px', padding: '5px' }}
+                />
+                <button onClick={handleSendFeedback} style={{ padding: '5px 10px' }}>
+                  Send Feedback
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className='w-2/6 max-h-[400px] bg-zinc-300 rounded-3xl px-10 pt-5 overflow-y-auto ml-[20px]'>
+          <h3 className='text-white font-black text-2xl'>Feedback</h3>
+          {feedbacks.map((feedback, index) => (
+            <div
+              onClick={() => handleMarkerClick(feedback.timestamp)}
+              className={`bg-white rounded-md mt-4 p-4 shadow-md hover:shadow-lg ${feedback.timestamp === activeMarker ? 'bg-blue-100' : ''}`}
+              key={index}
+              style={{ marginBottom: '10px', cursor: 'pointer' }}
+            >
+              <div style={{ color: 'blue' }}>
+                {formatTime(feedback.timestamp)}
+              </div>
+              <div>{feedback.comment}</div>
+            </div>
           ))}
         </div>
-
-        <button onClick={handleAddMarker} style={{ marginTop: '10px' }}>
-          Add Feedback
-        </button>
-        {activeMarker !== null && (
-          <div style={{ marginTop: '10px' }}>
-            <input
-              type="text"
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="Enter your comment"
-              style={{ marginRight: '10px', padding: '5px' }}
-            />
-            <button onClick={handleSendFeedback} style={{ padding: '5px 10px' }}>
-              Send Feedback
-            </button>
-          </div>
-        )}
-      </div>
-      <div style={{ flex: 0.3, marginLeft: '20px', maxHeight: '600px', overflowY: 'auto' }}>
-        <h3>Feedback</h3>
-        {feedbacks.map((feedback, index) => (
-          <div key={index} style={{ marginBottom: '10px', cursor: 'pointer' }}>
-            <div onClick={() => handleMarkerClick(feedback.timestamp)} style={{ color: 'blue' }}>
-              {formatTime(feedback.timestamp)}
-            </div>
-            <div>{feedback.comment}</div>
-          </div>
-        ))}
       </div>
     </div>
   );

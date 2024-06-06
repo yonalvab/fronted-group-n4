@@ -54,35 +54,3 @@ function App() {
 }
 
 export default App;
-
-{/* {currentView === 'home' && (
-)}
-
-{currentView === 'login' && <Login />}
-{currentView === 'register' && <Register />}
-
-<InfoUser /> */}
-{/* <article className='w-full h-[640px] bg-slate-300 rounded-3xl p-14 grid grid-cols-4 gap-8 overflow-y-auto'>
-  <Cards />
-  <Cards />
-  <Cards />
-  <Cards />
-  <Cards />
-  <Cards />
-  <Cards />
-  <Cards />
-</article> */}
-{/* <div className='flex gap-4'>
-        <button
-        className='h-11 w-[150px] rounded-xl flex gap-3 justify-center items-center bg-slate-400'
-            onClick={() => setCurrentView('login')}
-          >
-            <h1 className='font-bold'>Login</h1>
-          </button>
-          <button
-            className='h-11 w-[150px] rounded-xl flex gap-3 justify-center items-center bg-slate-400'
-            onClick={() => setCurrentView('register')}
-          >
-            <h1 className='font-bold'>Register</h1>
-          </button>
-        </div> */}

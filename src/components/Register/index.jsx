@@ -76,7 +76,7 @@ const Register = () => {
       setMessage('Registro exitoso');
       setError('');
 
-      navigate('/dashboard');
+      navigate('/app/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Error al registrar');
       setMessage('');
@@ -110,7 +110,7 @@ const Register = () => {
               name="usuario"
               value={formData.usuario}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#033663]"
               required
             />
           </div>
@@ -122,7 +122,7 @@ const Register = () => {
               name="contrasena"
               value={formData.contrasena}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#033663]"
               required
             />
           </div>
@@ -131,7 +131,7 @@ const Register = () => {
             <input
               type="file"
               onChange={handleImageUpload}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#033663]"
               required
             />
           </div>
@@ -141,7 +141,7 @@ const Register = () => {
               name="nivel"
               value={formData.nivel}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#033663]"
               required
             >
               <option value="">Selecciona un nivel</option>
@@ -152,7 +152,7 @@ const Register = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-200"
+            className="w-full bg-[#033663] text-white py-2 rounded-lg hover:bg-[#2c7de1] transition duration-200"
           >
             Registrar
           </button>

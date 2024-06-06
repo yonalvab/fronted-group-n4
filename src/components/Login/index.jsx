@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import CryptoJS from 'crypto-js';
+import {jwtDecode} from 'jwt-decode';
 import IconUsuario from '../../assets/images.png';
 import IconContraseña from '../../assets/102643.png';
 import './style.css'; 
@@ -23,23 +23,31 @@ const Login = () => {
 
 
     try {
-      const response = await axios.post('http://localhost:3000/api/usuarios/login', user, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await axios.post('http://localhost:3000/api/usuarios/login', user);
       
-      const { token, rol } = response.data;
-      console.log(response.data)
-    
-      const encryptedToken = CryptoJS.AES.encrypt(token, 'secret-key').toString();
-      localStorage.setItem('token', encryptedToken);
-      console.log(encryptedToken)
+
+      const { token } = response.data;
+      localStorage.setItem('token', token);
   
+      // // Verificar el rol del usuario
+      // if (role !== 'user' && role !== 'docente' && role !== 'admin') {
+      //   setError('Sólo los usuarios registrados, profesores y administradores pueden iniciar sesión..');
+      //   return;
+      // }
+
+   
+  
+      const decoded = jwtDecode(token);
+      localStorage.setItem('userId', decoded.id);
+      localStorage.setItem('rol', decoded.rol);
+      if (decoded.rol === 'user') {
+        localStorage.setItem('nivelId', decoded.nivelId);
+      }
+
       setMessage(response.data.message);
       setError('');
       
-      navigate('/dashboard');
+      navigate('/app/dashboard');
     } catch (err) {
       setError(err.response.data.message);
       setMessage('');
@@ -66,7 +74,7 @@ const Login = () => {
               type="text"
               value={usuario}
               onChange={(e) => setUsuario(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#033663]"
               required
             />
           </div>
@@ -77,28 +85,28 @@ const Login = () => {
               type="password"
               value={contrasena}
               onChange={(e) => setContrasena(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#033663]"
               required
             />
           </div>
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
-              <input type="checkbox" className="form-checkbox h-4 w-4 text-purple-600" />
+              <input type="checkbox" className="form-checkbox h-4 w-4 text-[#033663]" />
               <label className="ml-2 block text-gray-700">Recuerdame</label>
             </div>
             <div>
-              <a href="#" className="text-purple-600 hover:underline">Olvidaste tu contraseña?</a>
+              <a href="#" className="text-[#033663] hover:underline">Olvidaste tu contraseña?</a>
             </div>
           </div>
           <button
             type="submit"
-            className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-200"
+            className="w-full bg-[#033663] text-white py-2 rounded-lg hover:bg-[#2c7ee2] transition duration-200"
           >
             Login
           </button>
         </form>
         <p className="mt-4 text-center">
-          Don’t have an account? <a href="/register" className="text-purple-600 hover:underline">Register</a>
+          Don’t have an account? <a href="/register" className="text-[#033663] hover:underline">Register</a>
         </p>
       </div>
     </div>
