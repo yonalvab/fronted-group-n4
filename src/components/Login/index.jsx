@@ -32,7 +32,7 @@ const Login = () => {
   
       // Verificar el rol del usuario
       if (role !== 'usuario' && role !== 'docente' && role !== 'admin') {
-        setError('Only registered users, teachers, and admins can login.');
+        setError('Sólo los usuarios registrados, profesores y administradores pueden iniciar sesión..');
         return;
       }
   
@@ -48,7 +48,7 @@ const Login = () => {
       setMessage('');
     }
   }; 
-  
+
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
