@@ -8,17 +8,21 @@ export const Header = () => {
     const [modal, setModal] = useState(false);
     return (
         <>
-            <header className='bg-slate-300 h-14 w-full flex items-center pr-9 pl-2 mt-3 mb-2 justify-between rounded-full'>
 
-                <Link to="/app/dashboard" >
-                    <div className='flex items-center' >
-                        <div className='flex items-center gap-[2px]'>
-                            <img className='w-12 h-12' src={logovideo} alt="Logo" />
-                            <span className='text-[30px] font-poetsen text-[#D80000]'>StreamV</span>
-                        </div>
-                        <div className='bg-white w-[450px] h-9 flex items-center gap-2 px-3 rounded-full ml-[80px]'>
-                            <div className='w-7 border-r-2'>
-                                <img className='h-5 w-5' src={lupa} alt="Search" />
+            <header className='w-full flex items-center justify-between rounded-none bg-white m-0 px-16 h-20 shadow-lg z-20 fixed'>
+                <div className='flex items-center justify-between w-full'>
+                    <Link to="/app/dashboard" >
+                        <div className='flex items-center' >
+                            <div className='flex items-center gap-[2px]'>
+                                <img className='w-12 h-12' src={logovideo} alt="Logo" />
+                                <span className='text-[30px] font-poetsen text-[#D80000]'>StreamV</span>
+                            </div>
+                            <div className='bg-white w-[450px] h-9 flex items-center gap-2 px-3 rounded-full ml-[80px]'>
+                                <div className='w-7 border-r-2'>
+                                    <img className='h-5 w-5' src={lupa} alt="Search" />
+                                </div>
+                                <input className='w-[380px] ml-1 focus:outline-none' type="text" placeholder='Excribe algo euu' />
+
                             </div>
                             <input className='w-[380px] ml-1 focus:outline-none' type="text" placeholder='Escribe aqui' />
                         </div>

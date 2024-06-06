@@ -8,15 +8,15 @@ export const Dashboard = () => {
         <>
 
             <div className=' flex gap-7 ' >
-                <article className='w-full h-[640px] bg-slate-300 rounded-3xl px-16 py-14 grid grid-cols-2 gap-8 overflow-y-auto'>
-                    <Cards />
-                    <Cards />
-                    <Cards />
-                    <Cards />
-                    <Cards />
-                    <Cards />
-                    <Cards />
-                    <Cards />
+                <article className='w-full h-[640px] bg-white shadow-lg rounded-3xl px-16 py-14 grid grid-cols-3 gap-8 overflow-y-auto'>
+                        <Cards />
+                        <Cards />
+                        <Cards />
+                        <Cards />
+                        <Cards />
+                        <Cards />
+                        <Cards />
+                        <Cards />
                 </article>
                 <InfoUser />
             </div>

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 const VideoFeedback = () => {
+  
   const playerRef = useRef(null);
   const [markers, setMarkers] = useState([]);
   const [currentTime, setCurrentTime] = useState(0);
@@ -11,14 +12,17 @@ const VideoFeedback = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const [activeMarker, setActiveMarker] = useState(null);
   const [videoUrl, setVideoUrl] = useState('');
-  const videoId = '6660a66e324fd5111ac7a19b';
-  const { id } = useParams();
+  const { id } = useParams(); 
+  const videoId = id 
+  const userId = '665f6b3da3f461502bc0c185'; 
+
 
   useEffect(() => {
     const fetchVideoUrl = async () => {
+      console.log(videoId)
       try {
         const response = await axios.get(`http://localhost:3000/api/videos/${videoId}`);
-
+console.log(response)
         setVideoUrl(`http://localhost:3000/uploads/videos/${response.data.video}`);
       } catch (error) {
         console.error('Error fetching video URL:', error);
@@ -102,24 +106,8 @@ const VideoFeedback = () => {
             height='50%'
           />
         )}
-        <button onClick={handleAddMarker} style={{ marginTop: '10px' }}>
-          Add Marker
-        </button>
-        {activeMarker !== null && (
-          <div style={{ marginTop: '10px' }}>
-            <input
-              type="text"
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="Enter your comment"
-              style={{ marginRight: '10px', padding: '5px' }}
-            />
-            <button onClick={handleSendFeedback} style={{ padding: '5px 10px' }}>
-              Send Feedback
-            </button>
-          </div>
-        )}
-        <div style={{ marginTop: '10px', position: 'relative', height: '10px', background: '#eee' }}>
+        
+        <div className='!bg-black' style={{ marginTop: '0px', position: 'relative', height: '10px', background: '#eee' }}>
           {playerRef.current && markers.map((marker, index) => (
             <div
               key={index}
@@ -137,6 +125,24 @@ const VideoFeedback = () => {
             />
           ))}
         </div>
+
+        <button onClick={handleAddMarker} style={{ marginTop: '10px' }}>
+          Add Feedback
+        </button>
+        {activeMarker !== null && (
+          <div style={{ marginTop: '10px' }}>
+            <input
+              type="text"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="Enter your comment"
+              style={{ marginRight: '10px', padding: '5px' }}
+            />
+            <button onClick={handleSendFeedback} style={{ padding: '5px 10px' }}>
+              Send Feedback
+            </button>
+          </div>
+        )}
       </div>
       <div style={{ flex: 0.3, marginLeft: '20px', maxHeight: '600px', overflowY: 'auto' }}>
         <h3>Feedback</h3>
