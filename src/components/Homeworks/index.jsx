@@ -25,7 +25,7 @@ export const HomeWorks = () => {
       <article className='w-full h-[640px] bg-slate-300 rounded-3xl px-16 py-14 grid grid-cols-3 gap-8 overflow-y-auto'>
         {error && <p>{error}</p>}
         {tareas.map((tarea) => (
-          <TareaCards key={tarea._id} title={tarea.nombre} descripcion={tarea.descripcion} />
+          <TareaCards key={tarea._id} id={tarea._id} title={tarea.nombre} descripcion={tarea.descripcion} />
         ))}
       </article>
     </div>

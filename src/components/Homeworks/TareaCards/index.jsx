@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { SendWork } from '../SendWork';
 
-export const TareaCards = ({ title, descripcion }) => {
+export const TareaCards = ({ id, title, descripcion }) => {
     const [isWorkOpen, setIsWorkOpen] = useState(false);
 
     const handleOpenModalWork = () => {
@@ -33,7 +33,8 @@ export const TareaCards = ({ title, descripcion }) => {
                     </div>
                 </Link>
             </div>
-            <SendWork isOpen={isWorkOpen} onClose={handleCloseModalWork} />
+            <SendWork isOpen={isWorkOpen} onClose={handleCloseModalWork} tareaId={id}
+                tareaTitulo={title} />
         </>
     )
 }
