@@ -28,16 +28,12 @@ const Login = () => {
         },
       });
       
-      const { token, role } = response.data;
-  
-      // Verificar el rol del usuario
-      if (role !== 'usuario' && role !== 'docente' && role !== 'admin') {
-        setError('Sólo los usuarios registrados, profesores y administradores pueden iniciar sesión..');
-        return;
-      }
-  
+      const { token, rol } = response.data;
+      console.log(response.data)
+    
       const encryptedToken = CryptoJS.AES.encrypt(token, 'secret-key').toString();
       localStorage.setItem('token', encryptedToken);
+      console.log(encryptedToken)
   
       setMessage(response.data.message);
       setError('');
@@ -49,6 +45,12 @@ const Login = () => {
     }
   }; 
 
+      // Verificar el rol del usuario
+      /*if (rol !== 'user' && rol !== 'docente' && rol !== 'admin') {
+        setError('Sólo los usuarios registrados, profesores y administradores pueden iniciar sesión..');
+        return;
+      }
+*/
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
