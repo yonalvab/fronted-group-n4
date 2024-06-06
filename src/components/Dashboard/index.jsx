@@ -28,7 +28,7 @@ export const Dashboard = () => {
 
                 <article className='w-full h-[640px] bg-slate-300 rounded-3xl px-16 py-14 grid grid-cols-2 gap-8 overflow-y-auto'>
                 {miniVideos.map(video => (
-                    <Cards key={video._id} miniatura={`http://localhost:3000/api/videos/${video.miniatura}`} titulo={video.titulo} descripcion={video.descripcion}/> 
+                    <Cards key={video._id} miniatura={`http://localhost:3000/uploads/miniaturas/${video.miniatura}`} titulo={video.titulo} descripcion={video.descripcion}/> 
                 ))}
 
                 </article>

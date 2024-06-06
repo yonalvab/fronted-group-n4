@@ -76,7 +76,7 @@ const Register = () => {
       setMessage('Registro exitoso');
       setError('');
 
-      navigate('/dashboard');
+      navigate('/app/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Error al registrar');
       setMessage('');

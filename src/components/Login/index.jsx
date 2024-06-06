@@ -30,9 +30,10 @@ const Login = () => {
       });
       
       const { token, role } = response.data;
+      console.log(response.data);
   
       // Verificar el rol del usuario
-      if (role !== 'usuario' && role !== 'docente' && role !== 'admin') {
+      if (role !== 'user' && role !== 'docente' && role !== 'admin') {
         setError('Sólo los usuarios registrados, profesores y administradores pueden iniciar sesión..');
         return;
       }
@@ -43,7 +44,7 @@ const Login = () => {
       setMessage(response.data.message);
       setError('');
       
-      navigate('/dashboard');
+      navigate('/app/dashboard');
     } catch (err) {
       setError(err.response.data.message);
       setMessage('');
