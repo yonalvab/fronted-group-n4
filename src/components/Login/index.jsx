@@ -25,6 +25,7 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:3000/api/usuarios/login', user);
       
+
       const { token } = response.data;
       localStorage.setItem('token', token);
   
@@ -33,6 +34,8 @@ const Login = () => {
       //   setError('Sólo los usuarios registrados, profesores y administradores pueden iniciar sesión..');
       //   return;
       // }
+
+   
   
       const decoded = jwtDecode(token);
       localStorage.setItem('userId', decoded.id);
@@ -51,6 +54,12 @@ const Login = () => {
     }
   }; 
 
+      // Verificar el rol del usuario
+      /*if (rol !== 'user' && rol !== 'docente' && rol !== 'admin') {
+        setError('Sólo los usuarios registrados, profesores y administradores pueden iniciar sesión..');
+        return;
+      }
+*/
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
