@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import lupa from '../../assets/lupa.png';
 import logovideo from '../../assets/logovideo.png';
 import { Link } from 'react-router-dom';
+import Graficas from '../Graficas';
 
 export const Header = () => {
+    const [modal, setModal] = useState(false);
     return (
         <>
             <header className='bg-slate-300 h-14 w-full flex items-center pr-9 pl-2 mt-3 mb-2 justify-between rounded-full'>
@@ -30,7 +32,7 @@ export const Header = () => {
                             <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#FFFFFF"><path d="M220-180h150v-250h220v250h150v-390L480-765 220-570v390Zm-60 60v-480l320-240 320 240v480H530v-250H430v250H160Zm320-353Z" /></svg>
                         </div>
                     </Link>
-
+                    <button onClick={() => setModal(true)}>Graficas</button>
                     <Link to="/app/homeworks" >
                         <div className='w-[48px] h-[48px] flex hover:bg-slate-400 hover:rounded-2xl justify-center ' >
                             <div className=' absolute ' >
@@ -44,6 +46,10 @@ export const Header = () => {
                     </div>
                 </div>
             </header>
+            {modal && (
+                <Graficas setModal={setModal}/>
+            )
+            }
         </>
     )
 }
