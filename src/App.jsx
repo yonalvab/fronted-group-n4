@@ -24,11 +24,11 @@ function App() {
                 <Routes>
                   <Route path='dashboard/*' element={<Dashboard />} />
                   <Route path='homeworks' element={<HomeWorks />} />
+                  <Route path='videoFeedback' element={<VideoFeedback />} />
                 </Routes>
               </div>
             </>
           } />
-          <Route path='/videoFeedback' element={<VideoFeedback />}></Route>
           <Route path='/dashboard/*' element={<Dashboard />} ></Route>
         </Routes>
       </BrowserRouter>

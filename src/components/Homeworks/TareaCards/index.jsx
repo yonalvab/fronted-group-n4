@@ -1,9 +1,13 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { SendWork } from '../SendWork';
+import VideoFeedback from '../../VideoFeedback';
 
 export const TareaCards = ({ id, title, descripcion }) => {
     const [isWorkOpen, setIsWorkOpen] = useState(false);
+    const [videoEnviado, setVideoEnviado] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleOpenModalWork = () => {
         setIsWorkOpen(true);
@@ -12,6 +16,16 @@ export const TareaCards = ({ id, title, descripcion }) => {
     const handleCloseModalWork = () => {
         setIsWorkOpen(false);
     };
+
+    // Función para manejar la actualización de videoEnviado
+    const handleVideoEnviado = (enviado) => {
+        setVideoEnviado(enviado);
+    };
+
+    const handleVerFeedback = () => {
+        navigate('/app/videoFeedback');
+    };
+
     return (
         <>
             <div className="relative flex w-80 h-[190px] flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
@@ -25,16 +39,18 @@ export const TareaCards = ({ id, title, descripcion }) => {
                         {descripcion}
                     </p>
                 </div>
-                <Link>
-                    <div className="p-6 pt-0">
-                        <button data-ripple-light="true" type="button" className="select-none rounded-lg bg-blue-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" onClick={handleOpenModalWork}  >
-                            Open
-                        </button>
-                    </div>
-                </Link>
+                <div className="p-6 pt-0">
+                    <button
+                        data-ripple-light="true"
+                        type="button"
+                        className="select-none rounded-lg bg-blue-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                        onClick={videoEnviado ? handleVerFeedback : handleOpenModalWork}
+                    >
+                        {videoEnviado ? 'Ver feedback' : 'Open'}
+                    </button>
+                </div>
             </div>
-            <SendWork isOpen={isWorkOpen} onClose={handleCloseModalWork} tareaId={id}
-                tareaTitulo={title} />
+            <SendWork isOpen={isWorkOpen} onClose={handleCloseModalWork} tareaId={id} tareaTitulo={title} onVideoEnviado={handleVideoEnviado} />
         </>
-    )
-}
+    );
+};
