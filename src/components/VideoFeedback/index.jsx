@@ -16,6 +16,7 @@ const VideoFeedback = () => {
   const videoId = id 
   const userId = '665f6b3da3f461502bc0c185'; 
 
+
   useEffect(() => {
     const fetchVideoUrl = async () => {
       console.log(videoId)
@@ -58,16 +59,15 @@ console.log(response)
     }
 
     const newMarker = {
-      videoId,
-      userId,
+      videoId: id,
+      userId: '665eae6a2ca2fe2fb12fcb60', // Ajusta este ID según tu lógica
       timestamp: activeMarker,
       comment
     };
-
     try {
       const response = await axios.post(`http://localhost:3000/api/feedback/add/${videoId}`, newMarker);
       setFeedbacks([...feedbacks, response.data]);
-      setMarkers(markers.map(marker => 
+      setMarkers(markers.map(marker =>
         marker.timestamp === activeMarker ? response.data : marker
       ));
       setComment('');

@@ -40,12 +40,12 @@ function App() {
                   <Route path="videostareas/:id" element={<VideosTareas />} />
                   <Route path="alumnos" element={<Alumnos />} />
                   <Route path="tareas" element={<Tareas />} />
-
+                  <Route path='videoFeedback' element={<VideoFeedback />} />
                 </Routes>
               </div>
             </>
           } />
-          
+
           <Route path='/dashboard/*' element={<Dashboard />} ></Route>
         </Routes>
       </BrowserRouter>
